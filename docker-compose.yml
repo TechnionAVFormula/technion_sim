@@ -1,0 +1,50 @@
+version: '3'
+services:
+  ros1:
+    image: ros:melodic
+    command: roscore
+    networks:
+      - ros_net
+
+  ros1_listener:
+    image: ros:melodic
+    depends_on:
+      - ros1
+    volumes:
+      - ./ros1_listener.py:/ros1_listener.py
+    command: bash -c "source /opt/ros/melodic/setup.bash && python /ros1_listener.py"
+    networks:
+      - ros_net
+
+  ros2:
+    image: osrf/ros:foxy-desktop
+    command: sleep infinity
+    networks:
+      - ros_net
+
+
+  ros2_listener:
+    image: osrf/ros:galactic-desktop
+    depends_on:
+      - ros2
+    volumes:
+      - ./eufs_msgs:/eufs_msgs
+      - ./ros_setup.sh:/ros_setup.sh
+      - ./ros2_listener.py:/ros2_listener.py
+    command: ./ros_setup.sh
+    networks:
+      - ros_net
+
+  ros1_bridge:
+    image: osrf/ros:foxy-ros1-bridge
+    depends_on:
+      - ros1
+      - ros2
+    environment:
+      - ROS_MASTER_URI=http://ros1:11311
+    command: bash -c "./ros_entrypoint.sh && ros2 run ros1_bridge dynamic_bridge --bridge-all-2to1-topics --bridge-all-1to2-topics"
+    networks:
+      - ros_net
+
+networks:
+  ros_net:
