@@ -38,10 +38,10 @@ RUN cd eufs && \
 RUN cd eufs && rosdep update && rosdep install --from-paths /eufs --ignore-src -r -y
  
 
-WORKDIR /eufs  
-RUN  ../ros_entrypoint.sh && ros2 pkg create --build-type ament_python technion_sensors --dependencies rclpy technion_proto eufs_msgs
-RUN  ../ros_entrypoint.sh && ros2 pkg create --build-type ament_python technion_proto --dependencies rclpy eufs_msgs
-ADD ./sensors/imu/imu_sensor.py ./technion_sensors/technion_sensors/imu_sensor.py
-ADD ./proto/* ./technion_proto/technion_proto/
+#WORKDIR /eufs  
+#RUN  ../ros_entrypoint.sh && ros2 pkg create --build-type ament_python technion_sensors --dependencies rclpy technion_proto eufs_msgs
+#RUN  ../ros_entrypoint.sh && ros2 pkg create --build-type ament_python technion_proto --dependencies rclpy eufs_msgs
+#ADD ./sensors/imu/imu_sensor.py ./technion_sensors/technion_sensors/imu_sensor.py
+#ADD ./proto/* ./technion_proto/technion_proto/
 
-WORKDIR /
+#WORKDIR /

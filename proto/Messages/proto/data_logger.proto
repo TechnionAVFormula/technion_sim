@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package TechnionFormulaAV.Messages;
+
+import "common.proto";
+
+message DrivingDynamics1 {
+    uint32 speed_actual = 1;
+    uint32 speed_target = 2;
+    int32 steering_angle_actual = 3;
+    int32 steering_angle_target = 4;
+    uint32 brake_hydr_actual = 5;
+    uint32 brake_hydr_target = 6;
+    int32 motor_moment_actual = 7;
+    int32 motor_moment_target = 8;
+}
+
+message DrivingDynamics2 {
+    int32 acceleration_longitude = 1;
+    int32 acceleration_lateral = 2;
+    int32 yaw_rate = 3;
+}
+
+message SystemStatus {
+    uint32 as_state = 1;
+    uint32 ebs_state = 2;
+    uint32 ami_state = 3;
+    uint32 steering_state = 4;
+    uint32 service_brake_state = 5;
+    uint32 lap_counter = 6;
+    uint32 cones_count_actual = 7;
+    uint32 cones_count_all = 8;
+}
+
+

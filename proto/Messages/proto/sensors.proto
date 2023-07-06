@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package TechnionFormulaAV.Messages;
+
+import "common.proto";
+
+message IMUConfig {
+    uint32 sensor_id = 1;
+    Vector3D sensor_position = 2;
+}
+
+message GPSConfig {
+    uint32 sensor_id = 1;
+    Vector3D sensor_position = 2;
+}
+
+message CameraConfig {
+    uint32 sensor_id = 1;
+    Vector3D sensor_position = 2;
+    float hfov = 3;
+    float vfov = 4;
+    uint32 width = 5;
+    uint32 height = 6;
+}
+
+message LidarConfig{
+     uint32 sensor_id = 1;
+    Vector3D sensor_position = 2;
+    float hfov = 3;
+    float vfov = 4;
+}
+
+enum DepthCameraDataType {
+    DCH_Float32 = 0;
+    DCS_UInt16 = 1;
+}
+
+message DepthCameraConfig {
+    uint32 sensor_id = 1;
+    Vector3D sensor_position = 2;
+    float hfov = 3;
+    float vfov = 4;
+    uint32 width = 5;
+    uint32 height = 6;
+    DepthCameraDataType data_type = 7;
+}
+
+message CarMeasurments
+{
+    double wheel_velocity_rear_left = 1;
+    double wheel_velocity_rear_right = 2;
+    double wheel_velocity_front_left = 3;
+    double wheel_velocity_front_right = 4;
+    double throttle_position = 5;
+    double steering_angle = 6;   // radians. right positive
+    double brakes_position = 7;
+}
+
+message IMUMeasurments
+{
+    Vector3D acceleration = 2;
+    Vector3D angular_acceleration = 3;
+    Vector3D velocity = 4;
+    Vector3D angular_velocity = 5;
+    Vector3D orientation = 6;
+    double heading = 7;
+}
+
+message IMUSensor
+{
+    IMUConfig config = 1;
+    IMUMeasurments imu_measurments = 2;
+}
+
+message CarData {
+    IMUSensor imu_sensor = 1;
+    CarMeasurments car_measurments = 2;
+}
+
+message GPSSensor {
+    GPSConfig config = 1;
+    Vector3D position = 2;
+    float speed = 3;
+    double latitude = 4;
+    double longitude = 5;
+    double course = 6;
+}
+
+message CameraSensor {
+    CameraConfig config = 1;
+    uint32 frame_number = 2;
+    bytes pixels = 3;
+}
+
+message DepthCameraSensor {
+    DepthCameraConfig config = 1;
+    uint32 frame_number = 2;
+    uint32 width = 3;
+    uint32 height = 4;
+    bytes pixels = 5;
+}
+
+
+message LidarSensor{ //No need for Timestamp since its in the header.
+    LidarConfig config = 1; 
+    repeated Vector3D points = 2;
+}
+
+message ActualDriveInstructions
+{
+    float actual_gas = 1;              /// Goes from 0 to 1.0
+    float actual_brakes = 2;           /// Goes from 0 to 1.0
+    float actual_steering = 3;         /// Goes from -1.0 to 1.0
+    float optimal_speed = 4;           /// values are in [m/sec]. Range: should be 0 to 80[km/h] 
+}
+
+message Can {
+    uint32 timestamp = 1;
+    uint32 id = 2;
+    uint32 id_type = 3;
+    uint32 data_length = 4;
+    repeated uint32 data = 5;
+}
