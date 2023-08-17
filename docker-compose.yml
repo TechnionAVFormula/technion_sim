@@ -2,20 +2,21 @@ version: '3'
 
 services:
   ros1_bridge:
-    image: osrf/ros:foxy-ros1-bridge
+    build:
+      context: .
+      dockerfile: ros1_bridge.Dockerfile
+
     environment:
-      - "ROS_HOSTNAME=bridge"
-      - "ROS_MASTER_URI=http://ros1:11311"
-    networks:
-      - ros_network
+      - "ROS_HOSTNAME=localhost"
+      - "ROS_MASTER_URI=http://localhost:11311"
     command: ros2 run ros1_bridge dynamic_bridge
+    network_mode: host
 
   eufs_sim:
     build:
       context: .
-      dockerfile: Dockerfile
-    networks:
-      - ros_network
+      dockerfile: eufs_sim.Dockerfile
+
     environment:
       - DISPLAY=$DISPLAY
     volumes:
@@ -25,6 +26,3 @@ services:
     privileged: true
     network_mode: host
 
-networks:
-  ros_network:
-    driver: bridge
